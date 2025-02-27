@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Line.Messaging.Webhooks
 {
@@ -34,7 +35,12 @@ namespace Line.Messaging.Webhooks
             switch (messageType)
             {
                 case EventMessageType.Text:
-                    return new TextEventMessage((string)message.id, (string)message.text);
+                    bool isCheck = false;
+                    if (((IDictionary<string, Newtonsoft.Json.Linq.JToken>)dynamicObject).ContainsKey("isCheck"))
+                    {
+                        isCheck = (bool)dynamicObject?.isCheck;
+                    }
+                    return new TextEventMessage((string)message.id, (string)message.text, isCheck);
                 case EventMessageType.Image:
                 case EventMessageType.Audio:
                 case EventMessageType.Video:
